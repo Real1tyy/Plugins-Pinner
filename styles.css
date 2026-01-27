@@ -1,0 +1,240 @@
+/* Plugins Pinner Plugin Styles */
+
+/* Settings Navigation */
+.plugins-pinner-settings-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.plugins-pinner-nav-button {
+    padding: 8px 16px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 6px;
+    background-color: var(--background-secondary);
+    color: var(--text-normal);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--font-ui-medium);
+    font-weight: 500;
+}
+
+.plugins-pinner-nav-button:hover:not(.plugins-pinner-nav-button-active) {
+    background-color: var(--background-modifier-hover);
+}
+
+.plugins-pinner-nav-button-active {
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border-color: var(--interactive-accent);
+}
+
+/* Settings Content */
+.plugins-pinner-settings-content {
+    padding: 0;
+}
+
+/* Add Plugin Form */
+.plugins-pinner-add-form {
+    padding: 16px;
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin-bottom: 24px;
+}
+
+.plugins-pinner-add-form .setting-item {
+    border-top: none;
+    padding-top: 12px;
+}
+
+.plugins-pinner-add-form .setting-item:first-child {
+    padding-top: 0;
+}
+
+/* Plugin List */
+.plugins-pinner-plugin-list {
+    margin-top: 16px;
+}
+
+.plugins-pinner-plugin-list .setting-item {
+    padding: 12px;
+    background-color: var(--background-primary-alt);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 1px solid var(--background-modifier-border);
+}
+
+.plugins-pinner-plugin-list .setting-item:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.plugins-pinner-plugin-list .setting-item-info {
+    flex-grow: 1;
+}
+
+.plugins-pinner-plugin-list .setting-item-name {
+    font-weight: 500;
+    color: var(--text-normal);
+    word-break: break-all;
+}
+
+.plugins-pinner-plugin-list .setting-item-description {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+}
+
+.plugins-pinner-plugin-list .setting-item-control {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Empty State */
+.plugins-pinner-empty-state {
+    padding: 32px;
+    text-align: center;
+    color: var(--text-muted);
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    border: 1px dashed var(--background-modifier-border);
+    margin: 16px 0;
+}
+
+/* Status Container */
+.plugins-pinner-status-container {
+    padding: 16px;
+    background-color: var(--background-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--background-modifier-border);
+    margin-bottom: 24px;
+}
+
+.plugins-pinner-status {
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.plugins-pinner-status-idle {
+    background-color: var(--background-modifier-border);
+    color: var(--text-muted);
+}
+
+.plugins-pinner-status-syncing {
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+}
+
+.plugins-pinner-status-success {
+    background-color: var(--color-green);
+    color: var(--text-on-accent);
+}
+
+.plugins-pinner-status-error {
+    background-color: var(--color-red);
+    color: var(--text-on-accent);
+}
+
+.plugins-pinner-status-error {
+    color: var(--text-error);
+    padding: 8px;
+    margin-top: 8px;
+    background-color: var(--background-modifier-error-rgb);
+    border-radius: 4px;
+    font-size: var(--font-ui-smaller);
+}
+
+/* Downloaded Plugins List */
+.plugins-pinner-downloaded-list {
+    margin-top: 16px;
+}
+
+.plugins-pinner-downloaded-list .setting-item {
+    padding: 10px;
+    background-color: var(--background-primary-alt);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border: 1px solid var(--background-modifier-border);
+}
+
+.plugins-pinner-downloaded-list .setting-item-name {
+    font-weight: 500;
+    color: var(--text-normal);
+}
+
+.plugins-pinner-downloaded-list .setting-item-description {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+}
+
+/* Failed Plugins List */
+.plugins-pinner-failed-list {
+    margin-top: 16px;
+}
+
+.plugins-pinner-failed-list .setting-item {
+    padding: 10px;
+    background-color: var(--background-modifier-error-rgb);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border: 1px solid var(--background-modifier-error);
+}
+
+.plugins-pinner-failed-list .setting-item-name {
+    font-weight: 500;
+    color: var(--text-error);
+}
+
+.plugins-pinner-failed-list .setting-item-description {
+    color: var(--text-muted);
+    font-size: var(--font-ui-smaller);
+}
+
+/* Headings */
+.plugins-pinner-settings h2 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-size: var(--font-ui-large);
+    font-weight: 600;
+    color: var(--text-normal);
+    border-bottom: 1px solid var(--background-modifier-border);
+    padding-bottom: 8px;
+}
+
+.plugins-pinner-settings h2:first-child {
+    margin-top: 0;
+}
+
+.plugins-pinner-settings h3 {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: var(--font-ui-medium);
+    font-weight: 600;
+    color: var(--text-normal);
+}
+
+/* Buttons */
+.plugins-pinner-settings button {
+    cursor: pointer;
+}
+
+.plugins-pinner-settings button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Text Inputs */
+.plugins-pinner-settings input[type="text"] {
+    width: 100%;
+}
+
+/* Toggle Switches */
+.plugins-pinner-settings .checkbox-container {
+    display: flex;
+    align-items: center;
+}
