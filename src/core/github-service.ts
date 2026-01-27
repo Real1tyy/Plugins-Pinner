@@ -104,9 +104,7 @@ export class GitHubService {
    * Gets the required plugin files from a release.
    * Returns main.js, manifest.json, and optionally styles.css.
    */
-  getPluginAssets(
-    release: GitHubRelease,
-  ): {
+  getPluginAssets(release: GitHubRelease): {
     mainJs: GitHubAsset;
     manifest: GitHubAsset;
     styles?: GitHubAsset;

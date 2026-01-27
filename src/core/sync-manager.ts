@@ -82,7 +82,7 @@ export class SyncManager {
           url: plugin.url,
           version: plugin.version,
           downloadedAt: new Date().toISOString(),
-          hasStyles: false, // Will be updated by the download process
+          hasStyles: result.hasStyles ?? false,
         };
       } else if (!result.success) {
         // Record failure
@@ -161,6 +161,7 @@ export class SyncManager {
         success: true,
         skipped: false,
         pluginId: result.pluginId,
+        hasStyles: result.hasStyles,
       };
     }
 

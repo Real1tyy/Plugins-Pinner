@@ -14,6 +14,7 @@ export interface PluginSyncResult {
   skipped: boolean;
   error?: string;
   pluginId?: string;
+  hasStyles?: boolean;
 }
 
 export interface SyncSummary {
