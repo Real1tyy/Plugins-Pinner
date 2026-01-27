@@ -7,7 +7,10 @@ export const SETTINGS_DEFAULTS = {
   DEFAULT_VERSION: "0.0.0",
   DEFAULT_AUTO_SYNC_ON_LOAD: true,
   DEFAULT_SHOW_SYNC_NOTIFICATION: true,
-  DEFAULT_GITHUB_TOKEN: "",
+} as const;
+
+export const SECRET_KEYS = {
+  GITHUB_TOKEN: "github-token",
 } as const;
 
 export const LOCAL_DATA_DEFAULTS = {

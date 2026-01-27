@@ -1,6 +1,7 @@
 import { SettingsStore, SyncStore } from "@real1ty-obsidian-plugins";
 import { Notice, Plugin } from "obsidian";
 import { PluginScanner } from "./core/plugin-scanner";
+import { SecretManager } from "./core/secret-manager";
 import { SyncManager } from "./core/sync-manager";
 import { PluginsPinnerSettingsTab } from "./settings/settings-tab";
 import {
@@ -11,6 +12,7 @@ import {
 export default class PluginsPinnerPlugin extends Plugin {
   settingsStore!: SettingsStore<typeof PluginsPinnerSettingsSchema>;
   syncStore!: SyncStore<typeof PluginsPinnerLocalDataSchema>;
+  secretManager!: SecretManager;
   syncManager!: SyncManager;
   pluginScanner!: PluginScanner;
 
@@ -25,6 +27,8 @@ export default class PluginsPinnerPlugin extends Plugin {
       PluginsPinnerLocalDataSchema,
     );
     await this.syncStore.loadData();
+    this.secretManager = new SecretManager(this);
+
     this.pluginScanner = new PluginScanner(this.app);
     this.syncManager = new SyncManager(
       this.app,
@@ -36,6 +40,7 @@ export default class PluginsPinnerPlugin extends Plugin {
         this.app,
         this,
         this.settingsStore,
+        this.secretManager,
         this.syncManager,
         this.pluginScanner,
       ),
@@ -109,8 +114,8 @@ export default class PluginsPinnerPlugin extends Plugin {
       return;
     }
 
-    // Update token
-    this.syncManager.updateToken(settings.githubToken);
+    const githubToken = await this.secretManager.getGitHubToken();
+    this.syncManager.updateToken(githubToken);
 
     try {
       const summary = await this.syncManager.sync();
@@ -126,6 +131,7 @@ export default class PluginsPinnerPlugin extends Plugin {
         }
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Plugins Pinner: Auto-sync failed", error);
       if (settings.showSyncNotification) {
         new Notice(
@@ -149,8 +155,8 @@ export default class PluginsPinnerPlugin extends Plugin {
       return;
     }
 
-    // Update token
-    this.syncManager.updateToken(settings.githubToken);
+    const githubToken = await this.secretManager.getGitHubToken();
+    this.syncManager.updateToken(githubToken);
 
     new Notice("Plugins Pinner: Starting sync...");
 
@@ -169,6 +175,7 @@ export default class PluginsPinnerPlugin extends Plugin {
         new Notice("Plugins Pinner: All plugins are up to date");
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Plugins Pinner: Manual sync failed", error);
       new Notice("Plugins Pinner: Sync failed. Check console for details.");
     }

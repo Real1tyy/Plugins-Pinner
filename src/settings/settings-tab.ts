@@ -2,6 +2,7 @@ import type { SettingsStore } from "@real1ty-obsidian-plugins";
 import type { App, Plugin } from "obsidian";
 import { Notice, PluginSettingTab, Setting } from "obsidian";
 import type { PluginScanner } from "../core/plugin-scanner";
+import type { SecretManager } from "../core/secret-manager";
 import type { SyncManager } from "../core/sync-manager";
 import type { PluginsPinnerSettingsSchema } from "../types/schemas";
 import { cls } from "../utils/css";
@@ -17,6 +18,7 @@ export class PluginsPinnerSettingsTab extends PluginSettingTab {
     app: App,
     plugin: Plugin,
     private settingsStore: SettingsStore<typeof PluginsPinnerSettingsSchema>,
+    private secretManager: SecretManager,
     private syncManager: SyncManager,
     private pluginScanner: PluginScanner,
   ) {
@@ -100,6 +102,18 @@ export class PluginsPinnerSettingsTab extends PluginSettingTab {
     containerEl.createEl("h2", { text: "General Settings" });
 
     new Setting(containerEl)
+      .setName("GitHub Token")
+      .setDesc(
+        "Optional: Provide a GitHub personal access token to increase API rate limits (from 60 to 5000 requests per hour). Token is stored securely using Obsidian's Secret Storage.",
+      )
+      .addSecret(async (secret) => {
+        const token = await this.secretManager.getGitHubToken();
+        secret.setValue(token).onChange(async (value) => {
+          await this.secretManager.setGitHubToken(value);
+        });
+      });
+
+    new Setting(containerEl)
       .setName("Auto-sync on load")
       .setDesc("Automatically sync plugins when Obsidian starts")
       .addToggle((toggle) =>
@@ -135,8 +149,8 @@ export class PluginsPinnerSettingsTab extends PluginSettingTab {
   private async runSync(): Promise<void> {
     const settings = this.settingsStore.currentSettings;
 
-    // Update token in case it changed
-    this.syncManager.updateToken(settings.githubToken);
+    const githubToken = await this.secretManager.getGitHubToken();
+    this.syncManager.updateToken(githubToken);
 
     const summary = await this.syncManager.sync();
 
