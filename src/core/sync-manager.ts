@@ -28,7 +28,7 @@ export class SyncManager {
     private syncStore: SyncStore<typeof PluginsPinnerLocalDataSchema>,
   ) {
     this.githubService = new GitHubService({
-      token: this.currentSettings.githubToken,
+      token: "",
     });
     this.pluginDownloader = new PluginDownloader(app, this.githubService);
   }

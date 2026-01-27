@@ -8,6 +8,6 @@ export class SecretManager {
   constructor(private app: App) {}
 
   getGitHubToken(secretName: string): string {
-    return this.app.secretStorage.get(secretName) ?? "";
+    return this.app.secretStorage.getSecret(secretName) ?? "";
   }
 }

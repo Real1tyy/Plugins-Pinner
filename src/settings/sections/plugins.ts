@@ -88,20 +88,4 @@ export function renderPluginsSection(
     });
   }
 
-  // GitHub Token section
-  containerEl.createEl("h3", { text: "GitHub Authentication" });
-
-  new Setting(containerEl)
-    .setName("GitHub Personal Access Token")
-    .setDesc(
-      "Optional. Increases rate limit from 60 to 5000 requests per hour.",
-    )
-    .addText((text) =>
-      text
-        .setPlaceholder("ghp_xxxxxxxxxxxxxxxxxxxx")
-        .setValue(settings.githubToken)
-        .onChange(async (value) => {
-          await settingsStore.updateProperty("githubToken", value);
-        }),
-    );
 }
