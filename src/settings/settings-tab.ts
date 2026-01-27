@@ -1,6 +1,6 @@
 import type { SettingsStore } from "@real1ty-obsidian-plugins";
 import type { App, Plugin } from "obsidian";
-import { Notice, PluginSettingTab, Setting } from "obsidian";
+import { Notice, PluginSettingTab, SecretComponent, Setting } from "obsidian";
 import type { PluginScanner } from "../core/plugin-scanner";
 import type { SecretManager } from "../core/secret-manager";
 import type { SyncManager } from "../core/sync-manager";
@@ -104,14 +104,18 @@ export class PluginsPinnerSettingsTab extends PluginSettingTab {
     new Setting(containerEl)
       .setName("GitHub Token")
       .setDesc(
-        "Optional: Provide a GitHub personal access token to increase API rate limits (from 60 to 5000 requests per hour). Token is stored securely using Obsidian's Secret Storage.",
+        "Optional: Select a GitHub personal access token from SecretStorage to increase API rate limits (from 60 to 5000 requests per hour). Secrets are stored securely and can be shared across plugins.",
       )
-      .addSecret(async (secret) => {
-        const token = await this.secretManager.getGitHubToken();
-        secret.setValue(token).onChange(async (value) => {
-          await this.secretManager.setGitHubToken(value);
-        });
-      });
+      .addComponent((el) =>
+        new SecretComponent(this.app, el)
+          .setValue(this.settingsStore.currentSettings.githubTokenSecretName)
+          .onChange(async (value) => {
+            await this.settingsStore.updateProperty(
+              "githubTokenSecretName",
+              value,
+            );
+          }),
+      );
 
     new Setting(containerEl)
       .setName("Auto-sync on load")
@@ -149,7 +153,9 @@ export class PluginsPinnerSettingsTab extends PluginSettingTab {
   private async runSync(): Promise<void> {
     const settings = this.settingsStore.currentSettings;
 
-    const githubToken = await this.secretManager.getGitHubToken();
+    const githubToken = this.secretManager.getGitHubToken(
+      settings.githubTokenSecretName,
+    );
     this.syncManager.updateToken(githubToken);
 
     const summary = await this.syncManager.sync();

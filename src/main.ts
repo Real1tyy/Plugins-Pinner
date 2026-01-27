@@ -27,7 +27,7 @@ export default class PluginsPinnerPlugin extends Plugin {
       PluginsPinnerLocalDataSchema,
     );
     await this.syncStore.loadData();
-    this.secretManager = new SecretManager(this);
+    this.secretManager = new SecretManager(this.app);
 
     this.pluginScanner = new PluginScanner(this.app);
     this.syncManager = new SyncManager(
@@ -114,7 +114,9 @@ export default class PluginsPinnerPlugin extends Plugin {
       return;
     }
 
-    const githubToken = await this.secretManager.getGitHubToken();
+    const githubToken = this.secretManager.getGitHubToken(
+      settings.githubTokenSecretName,
+    );
     this.syncManager.updateToken(githubToken);
 
     try {
@@ -155,7 +157,9 @@ export default class PluginsPinnerPlugin extends Plugin {
       return;
     }
 
-    const githubToken = await this.secretManager.getGitHubToken();
+    const githubToken = this.secretManager.getGitHubToken(
+      settings.githubTokenSecretName,
+    );
     this.syncManager.updateToken(githubToken);
 
     new Notice("Plugins Pinner: Starting sync...");

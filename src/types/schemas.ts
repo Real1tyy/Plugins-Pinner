@@ -22,6 +22,9 @@ export const PluginsPinnerSettingsSchema = z
     showSyncNotification: z
       .boolean()
       .catch(SETTINGS_DEFAULTS.DEFAULT_SHOW_SYNC_NOTIFICATION),
+    githubTokenSecretName: z
+      .string()
+      .catch(SETTINGS_DEFAULTS.DEFAULT_GITHUB_TOKEN_SECRET_NAME),
   })
   .strip();
 
