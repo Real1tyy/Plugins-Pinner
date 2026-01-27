@@ -1,6 +1,6 @@
 {
 	"name": "plugins-pinner",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Pin and synchronize Obsidian plugin versions across devices using GitHub releases.",
 	"main": "main.js",
 	"scripts": {
