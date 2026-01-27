@@ -21,28 +21,33 @@ import { formatWikiLink, parsePropertyLinks } from "./link-parser";
  * addLinkToProperty(["[[Folder/Note]]"], "folder/note") // ["[[Folder/Note]]", "[[folder/note|note]]"] (case-sensitive, different entry)
  * ```
  */
-export function addLinkToProperty(currentValue: string | string[] | undefined, linkPath: string): string[] {
-	// Handle undefined or null
-	if (currentValue === undefined || currentValue === null) {
-		return [formatWikiLink(linkPath)];
-	}
+export function addLinkToProperty(
+  currentValue: string | string[] | undefined,
+  linkPath: string,
+): string[] {
+  // Handle undefined or null
+  if (currentValue === undefined || currentValue === null) {
+    return [formatWikiLink(linkPath)];
+  }
 
-	// Normalize to array
-	const currentArray = Array.isArray(currentValue) ? currentValue : [currentValue];
+  // Normalize to array
+  const currentArray = Array.isArray(currentValue)
+    ? currentValue
+    : [currentValue];
 
-	const existingPaths = parsePropertyLinks(currentArray);
+  const existingPaths = parsePropertyLinks(currentArray);
 
-	// Normalize paths for comparison to prevent duplicates with different casing or separators
-	const normalizedLinkPath = normalizePath(linkPath);
+  // Normalize paths for comparison to prevent duplicates with different casing or separators
+  const normalizedLinkPath = normalizePath(linkPath);
 
-	const normalizedExistingPaths = existingPaths.map((p) => normalizePath(p));
+  const normalizedExistingPaths = existingPaths.map((p) => normalizePath(p));
 
-	// Only add if not already present (using normalized path comparison)
-	if (!normalizedExistingPaths.includes(normalizedLinkPath)) {
-		return [...currentArray, formatWikiLink(linkPath)];
-	}
+  // Only add if not already present (using normalized path comparison)
+  if (!normalizedExistingPaths.includes(normalizedLinkPath)) {
+    return [...currentArray, formatWikiLink(linkPath)];
+  }
 
-	return currentArray;
+  return currentArray;
 }
 
 /**
@@ -61,23 +66,28 @@ export function addLinkToProperty(currentValue: string | string[] | undefined, l
  * removeLinkFromProperty(["[[Folder/Note]]"], "Folder/Note") // [] (case-sensitive removal)
  * ```
  */
-export function removeLinkFromProperty(currentValue: string | string[] | undefined, linkPath: string): string[] {
-	if (currentValue === undefined || currentValue === null) {
-		return [];
-	}
+export function removeLinkFromProperty(
+  currentValue: string | string[] | undefined,
+  linkPath: string,
+): string[] {
+  if (currentValue === undefined || currentValue === null) {
+    return [];
+  }
 
-	// Normalize to array
-	const currentArray = Array.isArray(currentValue) ? currentValue : [currentValue];
+  // Normalize to array
+  const currentArray = Array.isArray(currentValue)
+    ? currentValue
+    : [currentValue];
 
-	const normalizedLinkPath = normalizePath(linkPath);
+  const normalizedLinkPath = normalizePath(linkPath);
 
-	return currentArray.filter((item) => {
-		const parsed = parsePropertyLinks([item])[0];
+  return currentArray.filter((item) => {
+    const parsed = parsePropertyLinks([item])[0];
 
-		if (!parsed) return true; // Keep invalid entries
+    if (!parsed) return true; // Keep invalid entries
 
-		return normalizePath(parsed) !== normalizedLinkPath;
-	});
+    return normalizePath(parsed) !== normalizedLinkPath;
+  });
 }
 
 /**
@@ -96,10 +106,15 @@ export function removeLinkFromProperty(currentValue: string | string[] | undefin
  * hasLinkInProperty(["[[Folder/Note]]"], "Folder/Note") // true (case-sensitive match)
  * ```
  */
-export function hasLinkInProperty(currentValue: string | string[] | undefined, linkPath: string): boolean {
-	const existingPaths = parsePropertyLinks(currentValue);
+export function hasLinkInProperty(
+  currentValue: string | string[] | undefined,
+  linkPath: string,
+): boolean {
+  const existingPaths = parsePropertyLinks(currentValue);
 
-	const normalizedLinkPath = normalizePath(linkPath);
+  const normalizedLinkPath = normalizePath(linkPath);
 
-	return existingPaths.some((path) => normalizePath(path) === normalizedLinkPath);
+  return existingPaths.some(
+    (path) => normalizePath(path) === normalizedLinkPath,
+  );
 }

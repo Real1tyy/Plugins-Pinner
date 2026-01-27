@@ -5,22 +5,22 @@ import { Subject, type Subscription } from "rxjs";
  * Eliminates boilerplate for classes that need to notify observers of state changes.
  */
 export abstract class ChangeNotifier {
-	private changeSubject = new Subject<void>();
-	public readonly changes$ = this.changeSubject.asObservable();
+  private changeSubject = new Subject<void>();
+  public readonly changes$ = this.changeSubject.asObservable();
 
-	protected notifyChange(): void {
-		try {
-			this.changeSubject.next();
-		} catch (error) {
-			console.error("Error notifying change:", error);
-		}
-	}
+  protected notifyChange(): void {
+    try {
+      this.changeSubject.next();
+    } catch (error) {
+      console.error("Error notifying change:", error);
+    }
+  }
 
-	subscribe(observer: () => void): Subscription {
-		return this.changes$.subscribe(observer);
-	}
+  subscribe(observer: () => void): Subscription {
+    return this.changes$.subscribe(observer);
+  }
 
-	destroy(): void {
-		this.changeSubject.complete();
-	}
+  destroy(): void {
+    this.changeSubject.complete();
+  }
 }

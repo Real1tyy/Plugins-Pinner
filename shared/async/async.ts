@@ -23,17 +23,17 @@
  * ```
  */
 export function onceAsync<T>(fn: () => Promise<T>): () => Promise<T> {
-	let promise: Promise<T> | null = null;
+  let promise: Promise<T> | null = null;
 
-	return () => {
-		if (!promise) {
-			try {
-				promise = fn();
-			} catch (error) {
-				// Convert synchronous errors to rejected promises
-				promise = Promise.reject(error);
-			}
-		}
-		return promise;
-	};
+  return () => {
+    if (!promise) {
+      try {
+        promise = fn();
+      } catch (error) {
+        // Convert synchronous errors to rejected promises
+        promise = Promise.reject(error);
+      }
+    }
+    return promise;
+  };
 }

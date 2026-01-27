@@ -4,13 +4,13 @@
  * Returns true for all other values.
  */
 export function isNotEmpty(value: unknown): boolean {
-	if (value === undefined || value === null || value === "") {
-		return false;
-	}
-	if (Array.isArray(value) && value.length === 0) {
-		return false;
-	}
-	return true;
+  if (value === undefined || value === null || value === "") {
+    return false;
+  }
+  if (Array.isArray(value) && value.length === 0) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -19,9 +19,12 @@ export function isNotEmpty(value: unknown): boolean {
  * Returns the parsed integer if valid and positive, otherwise returns the fallback value.
  */
 export function parsePositiveInt(value: unknown, fallback: number): number {
-	if (value === undefined || value === null) {
-		return fallback;
-	}
-	const parsed = typeof value === "number" ? Math.floor(value) : Number.parseInt(String(value), 10);
-	return !Number.isNaN(parsed) && parsed > 0 ? parsed : fallback;
+  if (value === undefined || value === null) {
+    return fallback;
+  }
+  const parsed =
+    typeof value === "number"
+      ? Math.floor(value)
+      : Number.parseInt(String(value), 10);
+  return !Number.isNaN(parsed) && parsed > 0 ? parsed : fallback;
 }

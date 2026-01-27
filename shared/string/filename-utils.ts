@@ -17,7 +17,7 @@ import { sanitizeFilenamePreserveSpaces } from "../file/file";
  * - "tasks/homework" → "tasks/homework"
  */
 export const normalizeDirectoryPath = (directory: string): string => {
-	return directory.trim().replace(/^\/+|\/+$/g, "");
+  return directory.trim().replace(/^\/+|\/+$/g, "");
 };
 
 /**
@@ -30,17 +30,19 @@ export const normalizeDirectoryPath = (directory: string): string => {
  * extractDateAndSuffix("My Event 2025-01-15-ABC123") // { dateStr: "2025-01-15", suffix: "-ABC123" }
  * extractDateAndSuffix("Invalid filename") // null
  */
-export const extractDateAndSuffix = (basename: string): { dateStr: string; suffix: string } | null => {
-	const dateMatch = basename.match(/(\d{4}-\d{2}-\d{2})/);
-	if (!dateMatch) {
-		return null;
-	}
+export const extractDateAndSuffix = (
+  basename: string,
+): { dateStr: string; suffix: string } | null => {
+  const dateMatch = basename.match(/(\d{4}-\d{2}-\d{2})/);
+  if (!dateMatch) {
+    return null;
+  }
 
-	const dateStr = dateMatch[1];
-	const dateIndex = basename.indexOf(dateStr);
-	const suffix = basename.substring(dateIndex + dateStr.length);
+  const dateStr = dateMatch[1];
+  const dateIndex = basename.indexOf(dateStr);
+  const suffix = basename.substring(dateIndex + dateStr.length);
 
-	return { dateStr, suffix };
+  return { dateStr, suffix };
 };
 
 /**
@@ -55,17 +57,20 @@ export const extractDateAndSuffix = (basename: string): { dateStr: string; suffi
  * rebuildPhysicalInstanceFilename("Old Title 2025-01-15-ABC123", "New Title-XYZ789")
  * // Returns: "New Title 2025-01-15-ABC123"
  */
-export const rebuildPhysicalInstanceFilename = (currentBasename: string, newTitle: string): string | null => {
-	const dateAndSuffix = extractDateAndSuffix(currentBasename);
-	if (!dateAndSuffix) {
-		return null;
-	}
+export const rebuildPhysicalInstanceFilename = (
+  currentBasename: string,
+  newTitle: string,
+): string | null => {
+  const dateAndSuffix = extractDateAndSuffix(currentBasename);
+  if (!dateAndSuffix) {
+    return null;
+  }
 
-	const { dateStr, suffix } = dateAndSuffix;
+  const { dateStr, suffix } = dateAndSuffix;
 
-	// Remove any zettel ID from the new title (just in case)
-	const newTitleClean = newTitle.replace(/-[A-Z0-9]{6}$/, "");
-	const newTitleSanitized = sanitizeFilenamePreserveSpaces(newTitleClean);
+  // Remove any zettel ID from the new title (just in case)
+  const newTitleClean = newTitle.replace(/-[A-Z0-9]{6}$/, "");
+  const newTitleSanitized = sanitizeFilenamePreserveSpaces(newTitleClean);
 
-	return `${newTitleSanitized} ${dateStr}${suffix}`;
+  return `${newTitleSanitized} ${dateStr}${suffix}`;
 };

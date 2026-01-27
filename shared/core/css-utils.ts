@@ -2,48 +2,52 @@
  * Interface for CSS utility functions created by the factory.
  */
 export interface CssUtils {
-	/**
-	 * Prefixes class names with the plugin prefix.
-	 * Handles multiple class names and automatically adds the prefix.
-	 *
-	 * @example
-	 * cls("calendar-view") => "prefix-calendar-view"
-	 * cls("button", "active") => "prefix-button prefix-active"
-	 * cls("modal calendar") => "prefix-modal prefix-calendar"
-	 */
-	cls: (...classNames: string[]) => string;
+  /**
+   * Prefixes class names with the plugin prefix.
+   * Handles multiple class names and automatically adds the prefix.
+   *
+   * @example
+   * cls("calendar-view") => "prefix-calendar-view"
+   * cls("button", "active") => "prefix-button prefix-active"
+   * cls("modal calendar") => "prefix-modal prefix-calendar"
+   */
+  cls: (...classNames: string[]) => string;
 
-	/**
-	 * Adds prefixed class names to an element.
-	 *
-	 * @example
-	 * addCls(element, "active", "selected")
-	 */
-	addCls: (element: HTMLElement, ...classNames: string[]) => void;
+  /**
+   * Adds prefixed class names to an element.
+   *
+   * @example
+   * addCls(element, "active", "selected")
+   */
+  addCls: (element: HTMLElement, ...classNames: string[]) => void;
 
-	/**
-	 * Removes prefixed class names from an element.
-	 *
-	 * @example
-	 * removeCls(element, "active", "selected")
-	 */
-	removeCls: (element: HTMLElement, ...classNames: string[]) => void;
+  /**
+   * Removes prefixed class names from an element.
+   *
+   * @example
+   * removeCls(element, "active", "selected")
+   */
+  removeCls: (element: HTMLElement, ...classNames: string[]) => void;
 
-	/**
-	 * Toggles prefixed class names on an element.
-	 *
-	 * @example
-	 * toggleCls(element, "active")
-	 */
-	toggleCls: (element: HTMLElement, className: string, force?: boolean) => boolean;
+  /**
+   * Toggles prefixed class names on an element.
+   *
+   * @example
+   * toggleCls(element, "active")
+   */
+  toggleCls: (
+    element: HTMLElement,
+    className: string,
+    force?: boolean,
+  ) => boolean;
 
-	/**
-	 * Checks if element has a prefixed class.
-	 *
-	 * @example
-	 * hasCls(element, "active")
-	 */
-	hasCls: (element: HTMLElement, className: string) => boolean;
+  /**
+   * Checks if element has a prefixed class.
+   *
+   * @example
+   * hasCls(element, "active")
+   */
+  hasCls: (element: HTMLElement, className: string) => boolean;
 }
 
 /**
@@ -61,37 +65,41 @@ export interface CssUtils {
  * addCls(element, "active") // adds "my-plugin-active" to element
  */
 export function createCssUtils(prefix: string): CssUtils {
-	const cls = (...classNames: string[]): string => {
-		return classNames
-			.flatMap((name) => name.split(/\s+/))
-			.filter((name) => name.length > 0)
-			.map((name) => `${prefix}${name}`)
-			.join(" ");
-	};
+  const cls = (...classNames: string[]): string => {
+    return classNames
+      .flatMap((name) => name.split(/\s+/))
+      .filter((name) => name.length > 0)
+      .map((name) => `${prefix}${name}`)
+      .join(" ");
+  };
 
-	const addCls = (element: HTMLElement, ...classNames: string[]): void => {
-		const classes = cls(...classNames);
-		if (classes) {
-			element.classList.add(...classes.split(/\s+/));
-		}
-	};
+  const addCls = (element: HTMLElement, ...classNames: string[]): void => {
+    const classes = cls(...classNames);
+    if (classes) {
+      element.classList.add(...classes.split(/\s+/));
+    }
+  };
 
-	const removeCls = (element: HTMLElement, ...classNames: string[]): void => {
-		const classes = cls(...classNames);
-		if (classes) {
-			element.classList.remove(...classes.split(/\s+/));
-		}
-	};
+  const removeCls = (element: HTMLElement, ...classNames: string[]): void => {
+    const classes = cls(...classNames);
+    if (classes) {
+      element.classList.remove(...classes.split(/\s+/));
+    }
+  };
 
-	const toggleCls = (element: HTMLElement, className: string, force?: boolean): boolean => {
-		return element.classList.toggle(cls(className), force);
-	};
+  const toggleCls = (
+    element: HTMLElement,
+    className: string,
+    force?: boolean,
+  ): boolean => {
+    return element.classList.toggle(cls(className), force);
+  };
 
-	const hasCls = (element: HTMLElement, className: string): boolean => {
-		return element.classList.contains(cls(className));
-	};
+  const hasCls = (element: HTMLElement, className: string): boolean => {
+    return element.classList.contains(cls(className));
+  };
 
-	return { cls, addCls, removeCls, toggleCls, hasCls };
+  return { cls, addCls, removeCls, toggleCls, hasCls };
 }
 
 // ============================================================================

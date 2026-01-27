@@ -9,39 +9,41 @@ import type { GitHubRepoInfo } from "../types";
  * - github.com/owner/repo
  */
 export function parseGitHubUrl(url: string): GitHubRepoInfo | null {
-	try {
-		// Remove trailing slashes and .git suffix
-		let cleanUrl = url
-			.trim()
-			.replace(/\/+$/, "")
-			.replace(/\.git$/, "");
+  try {
+    // Remove trailing slashes and .git suffix
+    let cleanUrl = url
+      .trim()
+      .replace(/\/+$/, "")
+      .replace(/\.git$/, "");
 
-		// Add protocol if missing
-		if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
-			cleanUrl = "https://" + cleanUrl;
-		}
+    // Add protocol if missing
+    if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
+      cleanUrl = "https://" + cleanUrl;
+    }
 
-		const parsed = new URL(cleanUrl);
+    const parsed = new URL(cleanUrl);
 
-		// Validate it's a GitHub URL
-		if (!parsed.hostname.includes("github.com")) {
-			return null;
-		}
+    // Validate it's a GitHub URL
+    if (!parsed.hostname.includes("github.com")) {
+      return null;
+    }
 
-		// Extract owner and repo from pathname
-		const pathParts = parsed.pathname.split("/").filter((part) => part.length > 0);
+    // Extract owner and repo from pathname
+    const pathParts = parsed.pathname
+      .split("/")
+      .filter((part) => part.length > 0);
 
-		if (pathParts.length < 2) {
-			return null;
-		}
+    if (pathParts.length < 2) {
+      return null;
+    }
 
-		return {
-			owner: pathParts[0],
-			repo: pathParts[1],
-		};
-	} catch {
-		return null;
-	}
+    return {
+      owner: pathParts[0],
+      repo: pathParts[1],
+    };
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -53,30 +55,30 @@ export function parseGitHubUrl(url: string): GitHubRepoInfo | null {
  *  - positive if a > b
  */
 export function compareVersions(a: string, b: string): number {
-	const parseVersion = (v: string): number[] => {
-		return v.split(".").map((n) => parseInt(n, 10) || 0);
-	};
+  const parseVersion = (v: string): number[] => {
+    return v.split(".").map((n) => parseInt(n, 10) || 0);
+  };
 
-	const partsA = parseVersion(a);
-	const partsB = parseVersion(b);
+  const partsA = parseVersion(a);
+  const partsB = parseVersion(b);
 
-	const maxLength = Math.max(partsA.length, partsB.length);
+  const maxLength = Math.max(partsA.length, partsB.length);
 
-	for (let i = 0; i < maxLength; i++) {
-		const numA = partsA[i] || 0;
-		const numB = partsB[i] || 0;
+  for (let i = 0; i < maxLength; i++) {
+    const numA = partsA[i] || 0;
+    const numB = partsB[i] || 0;
 
-		if (numA !== numB) {
-			return numA - numB;
-		}
-	}
+    if (numA !== numB) {
+      return numA - numB;
+    }
+  }
 
-	return 0;
+  return 0;
 }
 
 /**
  * Validates that a URL is a valid GitHub repository URL.
  */
 export function isValidGitHubUrl(url: string): boolean {
-	return parseGitHubUrl(url) !== null;
+  return parseGitHubUrl(url) !== null;
 }

@@ -27,19 +27,19 @@ import { normalizePath, TFile } from "obsidian";
  * ```
  */
 export function getFileByPath(app: App, filePath: string): TFile | null {
-	// Normalize the path using Obsidian's utility
-	// This handles slashes, spaces, and platform-specific path issues
-	const normalizedPath = normalizePath(filePath);
+  // Normalize the path using Obsidian's utility
+  // This handles slashes, spaces, and platform-specific path issues
+  const normalizedPath = normalizePath(filePath);
 
-	// Use Vault's direct lookup method (most efficient)
-	// Prefer getFileByPath if available, otherwise use getAbstractFileByPath
-	if (typeof app.vault.getFileByPath === "function") {
-		return app.vault.getFileByPath(normalizedPath);
-	}
+  // Use Vault's direct lookup method (most efficient)
+  // Prefer getFileByPath if available, otherwise use getAbstractFileByPath
+  if (typeof app.vault.getFileByPath === "function") {
+    return app.vault.getFileByPath(normalizedPath);
+  }
 
-	const abstractFile = app.vault.getAbstractFileByPath(normalizedPath);
+  const abstractFile = app.vault.getAbstractFileByPath(normalizedPath);
 
-	return abstractFile instanceof TFile ? abstractFile : null;
+  return abstractFile instanceof TFile ? abstractFile : null;
 }
 
 /**
@@ -57,7 +57,7 @@ export function getFileByPath(app: App, filePath: string): TFile | null {
  * ```
  */
 export function ensureMarkdownExtension(path: string): string {
-	return path.endsWith(".md") ? path : `${path}.md`;
+  return path.endsWith(".md") ? path : `${path}.md`;
 }
 
 /**
@@ -74,7 +74,7 @@ export function ensureMarkdownExtension(path: string): string {
  * ```
  */
 export function removeMarkdownExtension(path: string): string {
-	return path.endsWith(".md") ? path.slice(0, -3) : path;
+  return path.endsWith(".md") ? path.slice(0, -3) : path;
 }
 
 // ============================================================================
@@ -94,41 +94,43 @@ export function removeMarkdownExtension(path: string): string {
  * @returns The display name to show in the UI
  */
 export function extractDisplayName(input: string): string {
-	if (!input) return "";
+  if (!input) return "";
 
-	// Remove any surrounding whitespace
-	const trimmed = input.trim();
+  // Remove any surrounding whitespace
+  const trimmed = input.trim();
 
-	// Check if it's a wiki link format [[path|alias]] or [[path]]
-	const wikiLinkMatch = trimmed.match(/^\[\[([^\]]+)\]\]$/);
+  // Check if it's a wiki link format [[path|alias]] or [[path]]
+  const wikiLinkMatch = trimmed.match(/^\[\[([^\]]+)\]\]$/);
 
-	if (wikiLinkMatch) {
-		const innerContent = wikiLinkMatch[1];
+  if (wikiLinkMatch) {
+    const innerContent = wikiLinkMatch[1];
 
-		// Check if there's an alias (pipe character)
-		const pipeIndex = innerContent.indexOf("|");
+    // Check if there's an alias (pipe character)
+    const pipeIndex = innerContent.indexOf("|");
 
-		if (pipeIndex !== -1) {
-			// Return the alias (everything after the pipe)
-			return innerContent.substring(pipeIndex + 1).trim();
-		}
+    if (pipeIndex !== -1) {
+      // Return the alias (everything after the pipe)
+      return innerContent.substring(pipeIndex + 1).trim();
+    }
 
-		// No alias, extract filename from path
-		const path = innerContent.trim();
+    // No alias, extract filename from path
+    const path = innerContent.trim();
 
-		const lastSlashIndex = path.lastIndexOf("/");
+    const lastSlashIndex = path.lastIndexOf("/");
 
-		const filename = lastSlashIndex !== -1 ? path.substring(lastSlashIndex + 1) : path;
+    const filename =
+      lastSlashIndex !== -1 ? path.substring(lastSlashIndex + 1) : path;
 
-		return filename.replace(/\.md$/i, "");
-	}
+    return filename.replace(/\.md$/i, "");
+  }
 
-	// Not a wiki link, treat as regular path
-	const lastSlashIndex = trimmed.lastIndexOf("/");
+  // Not a wiki link, treat as regular path
+  const lastSlashIndex = trimmed.lastIndexOf("/");
 
-	const filename = lastSlashIndex !== -1 ? trimmed.substring(lastSlashIndex + 1) : trimmed;
+  const filename =
+    lastSlashIndex !== -1 ? trimmed.substring(lastSlashIndex + 1) : trimmed;
 
-	return filename.replace(/\.md$/i, "");
+  return filename.replace(/\.md$/i, "");
 }
 
 /**
@@ -143,27 +145,30 @@ export function extractDisplayName(input: string): string {
  * @returns The actual file path (with .md extension)
  */
 export function extractFilePath(input: string): string {
-	if (!input) return "";
+  if (!input) return "";
 
-	const trimmed = input.trim();
+  const trimmed = input.trim();
 
-	// Check if it's a wiki link format [[path|alias]] or [[path]]
-	const wikiLinkMatch = trimmed.match(/^\[\[([^\]]+)\]\]$/);
+  // Check if it's a wiki link format [[path|alias]] or [[path]]
+  const wikiLinkMatch = trimmed.match(/^\[\[([^\]]+)\]\]$/);
 
-	if (wikiLinkMatch) {
-		const innerContent = wikiLinkMatch[1];
+  if (wikiLinkMatch) {
+    const innerContent = wikiLinkMatch[1];
 
-		// Check if there's an alias (pipe character)
-		const pipeIndex = innerContent.indexOf("|");
+    // Check if there's an alias (pipe character)
+    const pipeIndex = innerContent.indexOf("|");
 
-		const path = pipeIndex !== -1 ? innerContent.substring(0, pipeIndex).trim() : innerContent.trim();
+    const path =
+      pipeIndex !== -1
+        ? innerContent.substring(0, pipeIndex).trim()
+        : innerContent.trim();
 
-		// Ensure .md extension
-		return path.endsWith(".md") ? path : `${path}.md`;
-	}
+    // Ensure .md extension
+    return path.endsWith(".md") ? path : `${path}.md`;
+  }
 
-	// Not a wiki link, ensure .md extension
-	return trimmed.endsWith(".md") ? trimmed : `${trimmed}.md`;
+  // Not a wiki link, ensure .md extension
+  return trimmed.endsWith(".md") ? trimmed : `${trimmed}.md`;
 }
 
 // ============================================================================
@@ -171,12 +176,12 @@ export function extractFilePath(input: string): string {
 // ============================================================================
 
 export interface FileContext {
-	path: string;
-	pathWithExt: string;
-	baseName: string;
-	file: TFile | null;
-	frontmatter: Record<string, unknown> | undefined;
-	cache: CachedMetadata | null;
+  path: string;
+  pathWithExt: string;
+  baseName: string;
+  file: TFile | null;
+  frontmatter: Record<string, unknown> | undefined;
+  cache: CachedMetadata | null;
 }
 
 /**
@@ -184,24 +189,24 @@ export interface FileContext {
  * Handles path normalization, file lookup, and metadata caching.
  */
 export function getFileContext(app: App, path: string): FileContext {
-	const pathWithExt = ensureMarkdownExtension(path);
+  const pathWithExt = ensureMarkdownExtension(path);
 
-	const baseName = removeMarkdownExtension(path);
+  const baseName = removeMarkdownExtension(path);
 
-	const file = getFileByPath(app, pathWithExt);
+  const file = getFileByPath(app, pathWithExt);
 
-	const cache = file ? app.metadataCache.getFileCache(file) : null;
+  const cache = file ? app.metadataCache.getFileCache(file) : null;
 
-	const frontmatter = cache?.frontmatter;
+  const frontmatter = cache?.frontmatter;
 
-	return {
-		path,
-		pathWithExt,
-		baseName,
-		file,
-		frontmatter,
-		cache,
-	};
+  return {
+    path,
+    pathWithExt,
+    baseName,
+    file,
+    frontmatter,
+    cache,
+  };
 }
 
 /**
@@ -209,18 +214,18 @@ export function getFileContext(app: App, path: string): FileContext {
  * Returns null if the file doesn't exist, otherwise executes the callback with the context.
  */
 export async function withFileContext<T>(
-	app: App,
-	path: string,
-	callback: (context: FileContext) => Promise<T> | T
+  app: App,
+  path: string,
+  callback: (context: FileContext) => Promise<T> | T,
 ): Promise<T | null> {
-	const context = getFileContext(app, path);
+  const context = getFileContext(app, path);
 
-	if (!context.file) {
-		console.warn(`File not found: ${context.pathWithExt}`);
-		return null;
-	}
+  if (!context.file) {
+    console.warn(`File not found: ${context.pathWithExt}`);
+    return null;
+  }
 
-	return await callback(context);
+  return await callback(context);
 }
 
 // ============================================================================
@@ -248,21 +253,25 @@ export async function withFileContext<T>(
  * const path = getUniqueFilePath(app, "/", "Note"); // -> "Note.md"
  * ```
  */
-export function getUniqueFilePath(app: App, folder: string, baseName: string): string {
-	const normalizedFolder = folder && folder !== "/" ? folder : "";
-	const folderPath = normalizedFolder ? `${normalizedFolder}/` : "";
+export function getUniqueFilePath(
+  app: App,
+  folder: string,
+  baseName: string,
+): string {
+  const normalizedFolder = folder && folder !== "/" ? folder : "";
+  const folderPath = normalizedFolder ? `${normalizedFolder}/` : "";
 
-	let fileName = `${baseName}.md`;
-	let fullPath = `${folderPath}${fileName}`;
-	let counter = 1;
+  let fileName = `${baseName}.md`;
+  let fullPath = `${folderPath}${fileName}`;
+  let counter = 1;
 
-	while (app.vault.getAbstractFileByPath(fullPath)) {
-		fileName = `${baseName} ${counter}.md`;
-		fullPath = `${folderPath}${fileName}`;
-		counter++;
-	}
+  while (app.vault.getAbstractFileByPath(fullPath)) {
+    fileName = `${baseName} ${counter}.md`;
+    fullPath = `${folderPath}${fileName}`;
+    counter++;
+  }
 
-	return fullPath;
+  return fullPath;
 }
 
 /**
@@ -283,30 +292,36 @@ export function getUniqueFilePath(app: App, folder: string, baseName: string): s
  * // -> "assets/image 1.png" if image.png exists
  * ```
  */
-export const getUniqueFilePathFromFull = (app: App, filePath: string): string => {
-	// If file doesn't exist, return as-is
-	if (!app.vault.getAbstractFileByPath(filePath)) {
-		return filePath;
-	}
+export const getUniqueFilePathFromFull = (
+  app: App,
+  filePath: string,
+): string => {
+  // If file doesn't exist, return as-is
+  if (!app.vault.getAbstractFileByPath(filePath)) {
+    return filePath;
+  }
 
-	// Extract folder, base name, and extension
-	const lastSlashIndex = filePath.lastIndexOf("/");
-	const folderPath = lastSlashIndex !== -1 ? filePath.substring(0, lastSlashIndex + 1) : "";
-	const fileName = lastSlashIndex !== -1 ? filePath.substring(lastSlashIndex + 1) : filePath;
+  // Extract folder, base name, and extension
+  const lastSlashIndex = filePath.lastIndexOf("/");
+  const folderPath =
+    lastSlashIndex !== -1 ? filePath.substring(0, lastSlashIndex + 1) : "";
+  const fileName =
+    lastSlashIndex !== -1 ? filePath.substring(lastSlashIndex + 1) : filePath;
 
-	const lastDotIndex = fileName.lastIndexOf(".");
-	const baseName = lastDotIndex !== -1 ? fileName.substring(0, lastDotIndex) : fileName;
-	const extension = lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : "";
+  const lastDotIndex = fileName.lastIndexOf(".");
+  const baseName =
+    lastDotIndex !== -1 ? fileName.substring(0, lastDotIndex) : fileName;
+  const extension = lastDotIndex !== -1 ? fileName.substring(lastDotIndex) : "";
 
-	let counter = 1;
-	let uniquePath = `${folderPath}${baseName} ${counter}${extension}`;
+  let counter = 1;
+  let uniquePath = `${folderPath}${baseName} ${counter}${extension}`;
 
-	while (app.vault.getAbstractFileByPath(uniquePath)) {
-		counter++;
-		uniquePath = `${folderPath}${baseName} ${counter}${extension}`;
-	}
+  while (app.vault.getAbstractFileByPath(uniquePath)) {
+    counter++;
+    uniquePath = `${folderPath}${baseName} ${counter}${extension}`;
+  }
 
-	return uniquePath;
+  return uniquePath;
 };
 
 /**
@@ -320,14 +335,14 @@ export const getUniqueFilePathFromFull = (app: App, filePath: string): string =>
  * @returns Unique file path that doesn't exist in the vault
  */
 export const generateUniqueFilePath = (
-	app: App,
-	folder: string,
-	baseName: string,
-	extension: string = "md"
+  app: App,
+  folder: string,
+  baseName: string,
+  extension: string = "md",
 ): string => {
-	const folderPath = folder ? `${folder}/` : "";
-	const fullPath = `${folderPath}${baseName}.${extension}`;
-	return getUniqueFilePathFromFull(app, fullPath);
+  const folderPath = folder ? `${folder}/` : "";
+  const fullPath = `${folderPath}${baseName}.${extension}`;
+  return getUniqueFilePathFromFull(app, fullPath);
 };
 
 // ============================================================================
@@ -350,23 +365,23 @@ export const generateUniqueFilePath = (
  * ```
  */
 export function isFolderNote(filePath: string): boolean {
-	if (!filePath) return false;
+  if (!filePath) return false;
 
-	// Remove .md extension for comparison
-	const pathWithoutExt = removeMarkdownExtension(filePath);
+  // Remove .md extension for comparison
+  const pathWithoutExt = removeMarkdownExtension(filePath);
 
-	// Split path into segments
-	const segments = pathWithoutExt.split("/");
+  // Split path into segments
+  const segments = pathWithoutExt.split("/");
 
-	// Need at least 2 segments (folder/file)
-	if (segments.length < 2) return false;
+  // Need at least 2 segments (folder/file)
+  if (segments.length < 2) return false;
 
-	// Get the file name (last segment) and parent folder name (second to last)
-	const fileName = segments[segments.length - 1];
-	const parentFolderName = segments[segments.length - 2];
+  // Get the file name (last segment) and parent folder name (second to last)
+  const fileName = segments[segments.length - 1];
+  const parentFolderName = segments[segments.length - 2];
 
-	// File is a folder note if its name matches the parent folder
-	return fileName === parentFolderName;
+  // File is a folder note if its name matches the parent folder
+  return fileName === parentFolderName;
 }
 
 /**
@@ -383,13 +398,13 @@ export function isFolderNote(filePath: string): boolean {
  * ```
  */
 export function getFolderPath(filePath: string): string {
-	if (!filePath) return "";
+  if (!filePath) return "";
 
-	const lastSlashIndex = filePath.lastIndexOf("/");
+  const lastSlashIndex = filePath.lastIndexOf("/");
 
-	if (lastSlashIndex === -1) return "";
+  if (lastSlashIndex === -1) return "";
 
-	return filePath.substring(0, lastSlashIndex);
+  return filePath.substring(0, lastSlashIndex);
 }
 
 /**
@@ -406,13 +421,13 @@ export function getFolderPath(filePath: string): string {
  * ```
  */
 export function getFilesInFolder(app: App, folderPath: string): TFile[] {
-	const allFiles = app.vault.getMarkdownFiles();
+  const allFiles = app.vault.getMarkdownFiles();
 
-	return allFiles.filter((file) => {
-		const fileFolder = getFolderPath(file.path);
+  return allFiles.filter((file) => {
+    const fileFolder = getFolderPath(file.path);
 
-		return fileFolder === folderPath;
-	});
+    return fileFolder === folderPath;
+  });
 }
 
 /**
@@ -429,15 +444,15 @@ export function getFilesInFolder(app: App, folderPath: string): TFile[] {
  * ```
  */
 export function getAllFilesInFolderTree(app: App, folderPath: string): TFile[] {
-	const allFiles = app.vault.getMarkdownFiles();
+  const allFiles = app.vault.getMarkdownFiles();
 
-	const normalizedFolder = folderPath ? `${folderPath}/` : "";
+  const normalizedFolder = folderPath ? `${folderPath}/` : "";
 
-	return allFiles.filter((file) => {
-		if (!normalizedFolder) return true; // Root folder includes all files
+  return allFiles.filter((file) => {
+    if (!normalizedFolder) return true; // Root folder includes all files
 
-		return file.path.startsWith(normalizedFolder);
-	});
+    return file.path.startsWith(normalizedFolder);
+  });
 }
 
 /**
@@ -461,20 +476,20 @@ export function getAllFilesInFolderTree(app: App, folderPath: string): TFile[] {
  * ```
  */
 export function getParentByFolder(app: App, filePath: string): string | null {
-	const folderPath = getFolderPath(filePath);
+  const folderPath = getFolderPath(filePath);
 
-	if (!folderPath) return null; // File is at root level
+  if (!folderPath) return null; // File is at root level
 
-	// Check if folder note exists
-	const folderSegments = folderPath.split("/");
+  // Check if folder note exists
+  const folderSegments = folderPath.split("/");
 
-	const parentFolderName = folderSegments[folderSegments.length - 1];
+  const parentFolderName = folderSegments[folderSegments.length - 1];
 
-	const potentialParentPath = `${folderPath}/${parentFolderName}.md`;
+  const potentialParentPath = `${folderPath}/${parentFolderName}.md`;
 
-	const parentFile = getFileByPath(app, potentialParentPath);
+  const parentFile = getFileByPath(app, potentialParentPath);
 
-	return parentFile ? potentialParentPath : null;
+  return parentFile ? potentialParentPath : null;
 }
 
 /**
@@ -504,57 +519,57 @@ export function getParentByFolder(app: App, filePath: string): string | null {
  * ```
  */
 export function getChildrenByFolder(app: App, filePath: string): string[] {
-	const allFiles = app.vault.getMarkdownFiles();
+  const allFiles = app.vault.getMarkdownFiles();
 
-	// Case 1: Folder note - get all files in the folder
-	if (isFolderNote(filePath)) {
-		const folderPath = getFolderPath(filePath);
+  // Case 1: Folder note - get all files in the folder
+  if (isFolderNote(filePath)) {
+    const folderPath = getFolderPath(filePath);
 
-		const children: string[] = [];
+    const children: string[] = [];
 
-		allFiles.forEach((file) => {
-			// Skip the folder note itself
-			if (file.path === filePath) return;
+    allFiles.forEach((file) => {
+      // Skip the folder note itself
+      if (file.path === filePath) return;
 
-			const fileFolder = getFolderPath(file.path);
+      const fileFolder = getFolderPath(file.path);
 
-			// Direct child: file is in the same folder as the folder note
-			if (fileFolder === folderPath) {
-				children.push(file.path);
+      // Direct child: file is in the same folder as the folder note
+      if (fileFolder === folderPath) {
+        children.push(file.path);
 
-				return;
-			}
+        return;
+      }
 
-			// Subfolder note: file is a folder note one level deeper
-			// e.g., for "tasks/tasks.md", include "tasks/subtasks/subtasks.md"
-			if (fileFolder.startsWith(`${folderPath}/`)) {
-				// Check if it's exactly one level deeper and is a folder note
-				const relativePath = fileFolder.substring(folderPath.length + 1);
+      // Subfolder note: file is a folder note one level deeper
+      // e.g., for "tasks/tasks.md", include "tasks/subtasks/subtasks.md"
+      if (fileFolder.startsWith(`${folderPath}/`)) {
+        // Check if it's exactly one level deeper and is a folder note
+        const relativePath = fileFolder.substring(folderPath.length + 1);
 
-				const isOneLevel = !relativePath.includes("/");
+        const isOneLevel = !relativePath.includes("/");
 
-				if (isOneLevel && isFolderNote(file.path)) {
-					children.push(file.path);
-				}
-			}
-		});
+        if (isOneLevel && isFolderNote(file.path)) {
+          children.push(file.path);
+        }
+      }
+    });
 
-		return children;
-	}
+    return children;
+  }
 
-	// Case 2: Regular file - check for matching subfolder with folder note
-	const pathWithoutExt = removeMarkdownExtension(filePath);
+  // Case 2: Regular file - check for matching subfolder with folder note
+  const pathWithoutExt = removeMarkdownExtension(filePath);
 
-	const fileName = pathWithoutExt.split("/").pop() || "";
+  const fileName = pathWithoutExt.split("/").pop() || "";
 
-	const potentialChildFolder = `${pathWithoutExt}`;
+  const potentialChildFolder = `${pathWithoutExt}`;
 
-	const potentialChildPath = `${potentialChildFolder}/${fileName}.md`;
+  const potentialChildPath = `${potentialChildFolder}/${fileName}.md`;
 
-	// Check if the child folder note exists
-	const childFile = getFileByPath(app, potentialChildPath);
+  // Check if the child folder note exists
+  const childFile = getFileByPath(app, potentialChildPath);
 
-	return childFile ? [potentialChildPath] : [];
+  return childFile ? [potentialChildPath] : [];
 }
 
 /**
@@ -581,7 +596,7 @@ export function getChildrenByFolder(app: App, filePath: string): string[] {
  * ```
  */
 export function findRootNodesInFolder(app: App, folderPath: string): string[] {
-	return getFilesInFolder(app, folderPath).map((file) => file.path);
+  return getFilesInFolder(app, folderPath).map((file) => file.path);
 }
 
 // ============================================================================
@@ -589,12 +604,12 @@ export function findRootNodesInFolder(app: App, folderPath: string): string[] {
 // ============================================================================
 
 export interface SanitizeFilenameOptions {
-	/**
-	 * Style of sanitization to apply.
-	 * - "kebab": Convert to lowercase, replace spaces with hyphens (default, backwards compatible)
-	 * - "preserve": Preserve spaces and case, only remove invalid characters
-	 */
-	style?: "kebab" | "preserve";
+  /**
+   * Style of sanitization to apply.
+   * - "kebab": Convert to lowercase, replace spaces with hyphens (default, backwards compatible)
+   * - "preserve": Preserve spaces and case, only remove invalid characters
+   */
+  style?: "kebab" | "preserve";
 }
 
 /**
@@ -612,15 +627,18 @@ export interface SanitizeFilenameOptions {
  * // Preserve spaces and case
  * sanitizeForFilename("My File Name", { style: "preserve" }) // "My File Name"
  */
-export const sanitizeForFilename = (input: string, options: SanitizeFilenameOptions = {}): string => {
-	const { style = "kebab" } = options;
+export const sanitizeForFilename = (
+  input: string,
+  options: SanitizeFilenameOptions = {},
+): string => {
+  const { style = "kebab" } = options;
 
-	if (style === "preserve") {
-		return sanitizeFilenamePreserveSpaces(input);
-	}
+  if (style === "preserve") {
+    return sanitizeFilenamePreserveSpaces(input);
+  }
 
-	// Default: kebab-case style (legacy behavior)
-	return sanitizeFilenameKebabCase(input);
+  // Default: kebab-case style (legacy behavior)
+  return sanitizeFilenameKebabCase(input);
 };
 
 /**
@@ -636,19 +654,19 @@ export const sanitizeForFilename = (input: string, options: SanitizeFilenameOpti
  * sanitizeFilenameKebabCase("Travel Around The World") // "travel-around-the-world"
  */
 export const sanitizeFilenameKebabCase = (input: string): string => {
-	return (
-		input
-			// Remove invalid filename characters
-			.replace(/[<>:"/\\|?*]/g, "")
-			// Replace spaces with hyphens
-			.replace(/\s+/g, "-")
-			// Replace multiple hyphens with single
-			.replace(/-+/g, "-")
-			// Remove leading/trailing hyphens
-			.replace(/^-|-$/g, "")
-			// Convert to lowercase
-			.toLowerCase()
-	);
+  return (
+    input
+      // Remove invalid filename characters
+      .replace(/[<>:"/\\|?*]/g, "")
+      // Replace spaces with hyphens
+      .replace(/\s+/g, "-")
+      // Replace multiple hyphens with single
+      .replace(/-+/g, "-")
+      // Remove leading/trailing hyphens
+      .replace(/^-|-$/g, "")
+      // Convert to lowercase
+      .toLowerCase()
+  );
 };
 
 /**
@@ -665,22 +683,27 @@ export const sanitizeFilenameKebabCase = (input: string): string => {
  * sanitizeFilenamePreserveSpaces("File<Invalid>Chars") // "FileInvalidChars"
  */
 export const sanitizeFilenamePreserveSpaces = (input: string): string => {
-	return (
-		input
-			// Remove invalid filename characters (cross-platform compatibility)
-			.replace(/[<>:"/\\|?*]/g, "")
-			// Remove trailing dots (invalid on Windows)
-			.replace(/\.+$/g, "")
-			// Remove leading/trailing whitespace
-			.trim()
-	);
+  return (
+    input
+      // Remove invalid filename characters (cross-platform compatibility)
+      .replace(/[<>:"/\\|?*]/g, "")
+      // Remove trailing dots (invalid on Windows)
+      .replace(/\.+$/g, "")
+      // Remove leading/trailing whitespace
+      .trim()
+  );
 };
 
 export const getFilenameFromPath = (filePath: string): string => {
-	return filePath.split("/").pop() || "Unknown";
+  return filePath.split("/").pop() || "Unknown";
 };
 
-export const isFileInConfiguredDirectory = (filePath: string, directory: string): boolean => {
-	const normalizedDir = directory.endsWith("/") ? directory.slice(0, -1) : directory;
-	return filePath.startsWith(`${normalizedDir}/`) || filePath === normalizedDir;
+export const isFileInConfiguredDirectory = (
+  filePath: string,
+  directory: string,
+): boolean => {
+  const normalizedDir = directory.endsWith("/")
+    ? directory.slice(0, -1)
+    : directory;
+  return filePath.startsWith(`${normalizedDir}/`) || filePath === normalizedDir;
 };
