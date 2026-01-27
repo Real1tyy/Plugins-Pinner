@@ -30,7 +30,7 @@
 	},
 	"dependencies": {
 		"@octokit/rest": "^22.0.1",
-		"@real1ty-obsidian-plugins": "workspace:*",
+		"@real1ty-obsidian-plugins": "file:./shared",
 		"rxjs": "^7.8.2",
 		"zod": "^4.3.5"
 	}
