@@ -1,10 +1,10 @@
 {
-	"id": "plugins-pinner",
-	"name": "Plugins Pinner",
-	"version": "0.3.0",
-	"minAppVersion": "1.11.4",
-	"description": "Pin and synchronize Obsidian plugin versions across devices using GitHub releases.",
-	"author": "Real1tyy",
-	"authorUrl": "https://matejvavroproductivity.com/",
-	"isDesktopOnly": false
+  "id": "plugins-pinner",
+  "name": "Plugins Pinner",
+  "version": "0.3.0",
+  "minAppVersion": "1.11.4",
+  "description": "Pin and synchronize Obsidian plugin versions across devices using GitHub releases.",
+  "author": "Real1tyy",
+  "authorUrl": "https://matejvavroproductivity.com/",
+  "isDesktopOnly": false
 }

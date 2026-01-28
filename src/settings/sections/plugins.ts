@@ -87,5 +87,4 @@ export function renderPluginsSection(
       cls: cls("empty-state"),
     });
   }
-
 }
